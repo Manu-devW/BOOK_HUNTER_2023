@@ -48,13 +48,21 @@ IV. LA ROUTE PAR DÉFAUT > Commit: Route par défaut: pages.home
 	PATTERN: /
 	CTRL: pagesController
 	ACTION: home
-	VIEW: pages.home
-		Faire appel à 
-			- books._index
-			- authors._index
+	VIEW: pages/home.php
+
+		PageController.php
+			> homeAction
+				- $books -> booksModel -> findAllPopulars (GROUP BY)
+				- $authors -> authorsModel -> findAllPopulars (GROUP BY)
+			> pages/home.php
+				> books/_index.php
+				> authors/_index.php
+
 	ATTENTION: 
-		Pour les tags: Faire appel à la fonction findAllByBookId()
-		et à la vue tags._index
+		Pour les tags: 
+		Dans le foreach de books/_index.php
+		Faire appel à la fonction findAllByBookId(xxx) du tagsModel -> $tags
+		et inclure la vue tags/_index.php et y faire un foreach sur $tags
 
 -------------------------------------------------------------------------------
 V. ROUTE DE LA LISTE DES BOOKS > Commit: Route books.index
@@ -62,8 +70,8 @@ V. ROUTE DE LA LISTE DES BOOKS > Commit: Route books.index
 	PATTERN: /?books=index
 	CTRL: booksController
 	ACTION: index
-	VIEW: books.index
-		> Fait appel à books._index
+	VIEW: books/index.php
+		> Fait appel à books/_index.php
 		> Créer un router 'books' avec un switch !
 		> Ceci est le default
 
@@ -73,8 +81,8 @@ VI. ROUTE DE LA LISTE DES AUTHORS > Commit: Route authors.index
 	PATTERN: /?authors=index
 	CTRL: authorsController
 	ACTION: index
-	VIEW: authors.index
-		> Fait appel à authors._index
+	VIEW: authors/index.php
+		> Fait appel à authors/_index.php
 		> Créer un router 'authors' avec un switch !
 		> Ceci est le default
 
@@ -84,7 +92,7 @@ VII. ROUTE DU DÉTAIL D'UN BOOK > Commit: Route books.show
 	PATTERN: /?books=show&id=x
 	CTRL: booksController
 	ACTION: show
-	VIEW: books.show
+	VIEW: books/show.php
 		> Nouveau case dans le switch du router 'books'
 
 -------------------------------------------------------------------------------
@@ -93,7 +101,7 @@ VIII. ROUTE DU DÉTAIL D'UN AUTHOR > Commit: Route authors.show
 	PATTERN: /?authors=show&id=x
 	CTRL: authorsController
 	ACTION: show
-	VIEW: authors.show
+	VIEW: authors/show.php
 		> Nouveau case dans le switch du router 'authors'
 
 		Faire appel à la fonction findAllByAuthorId()
@@ -103,7 +111,7 @@ VIII. ROUTE DU DÉTAIL D'UN AUTHOR > Commit: Route authors.show
 -------------------------------------------------------------------------------
 IX. TEMPLATE - CATÉGORIES > Commit: Ajout des catégories dans le aside
 -------------------------------------------------------------------------------
-	Faire appel à categories._index
+	Faire appel à categories/_index.php
 
 
 -------------------------------------------------------------------------------
@@ -112,13 +120,13 @@ X. ROUTE DU DÉTAIL D'UNE CATÉGORIE > Commit: Route categories.show
 	PATTERN: /?categories=show&id=x
 	CTRL: categoriesController
 	ACTION: show
-	VIEW: categories.show
+	VIEW: categories/show.php
 		> Nouveau case dans le switch du router 'categories'
 
 -------------------------------------------------------------------------------
 XI. TEMPLATE - TAGS > Commit: Ajout des tags dans le aside
 -------------------------------------------------------------------------------
-	Faire appel à tags._index
+	Faire appel à tags/_index.php
 
 
 -------------------------------------------------------------------------------
@@ -127,7 +135,7 @@ XII. ROUTE DU DÉTAIL D'UN TAG > Commit: Route tags.show
 	PATTERN: /?tags=show&id=x
 	CTRL: tagsController
 	ACTION: show
-	VIEW: tags.show
+	VIEW: tags/show.php
 		> Nouveau case dans le switch du router 'tags'
 
 -------------------------------------------------------------------------------
@@ -136,7 +144,7 @@ XIII. ROUTE AJOUT À MA COLLECTION > Commit: Route collections.create
 	PATTERN: /?collections=create
 	CTRL: collectionsController
 	ACTION: create
-	REDIRECT: books.show avec un message dans la session	
+	REDIRECT: books/show.php avec un message dans la session	
 		> Le livre a bien été ajouté à votre collection
 
 
